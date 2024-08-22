@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "module": "NodeNext",                                /* Specify what module code is generated. */
+    "moduleResolution": "NodeNext",
+    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
+    "outDir": "./dist",                                  /* Redirect output structure to the directory. */
+    "strict": true,                                      /* Enable all strict type-checking options. */            /* Skip type checking .d.ts files that are included with TypeScript. */
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+    "sourceMap": true,                                     /* Generates corresponding '.map' file. [DEBUG]*/
+  },
+
+  "include": ["src/**/*", "src/types/**/*.d.types.ts"],                             /* Specify the root files and the compiler options in the project. */
+}
