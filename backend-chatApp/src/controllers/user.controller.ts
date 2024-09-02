@@ -4,8 +4,8 @@ import User from '../models/user.model.js';
 
 export const getUsersForSidebar= async(req:Request, res:Response)=>{
     try{
-        const loggedInUserID= req.user?._id;    
-        const allUsers = await User.find({_id:{$ne:loggedInUserID}}).select('userName');
+        const loggedInUserID= req.user?._id;
+        const allUsers = await User.find({_id:{$ne:loggedInUserID}}).select('-password');
         if(!allUsers) res.status(200).json([]);
         res.status(200).json(allUsers);
 
