@@ -22,6 +22,7 @@ export type Message={
     receiverID:string,
     message:string,
     createdAt:string
+    shouldShake:boolean
 }
 
 export type sendMessage=Pick<Message, 'senderID'|'receiverID'|'message'>;

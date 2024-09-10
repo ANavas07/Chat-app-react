@@ -1,18 +1,27 @@
 import express, {Application, Request, Response, NextFunction} from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import http from "http";
 
 import authRoutes from '../routes/auth.routes.js';
 import messageRoutes from '../routes/message.routes.js';
 import userRoutes from '../routes/user.routes.js';
 import connectToMongoDb from '../DB/connectToMongoDb.DB.js';
+import SocketServer from '../socket/socket.socket.js';
 
 export default class Server{
     private app:express.Application; 
     private PORT:string;
+    private httpServer: http.Server;
     
     constructor(){
-        this.app = express();
+        //this.app = express(); //before socket io
+        //---app exported from socket io server---
+        const socketServer = SocketServer.getInstance();
+        this.app= socketServer.getApp();
+        this.httpServer=socketServer['httpServer']; //get instance of http server
+        //---app exported from socket io server---
+
         this.PORT= process.env.PORT || "3001";
         this.listen();
         this.middlewares();
@@ -20,7 +29,8 @@ export default class Server{
     }
 
     listen(){
-        this.app.listen(this.PORT, ()=>{
+        // this.app.listen(this.PORT, ()=>{  //before socket io
+        this.httpServer.listen(this.PORT, ()=>{
             connectToMongoDb();
             console.log("Server running on port "+this.PORT);
         });

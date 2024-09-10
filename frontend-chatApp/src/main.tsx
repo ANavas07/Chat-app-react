@@ -4,6 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthContextProvider } from './context/AuthContext.tsx'
+import { SocketContextProvider } from './context/SocketContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -11,7 +12,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       {/*AuthContext wrapp app (in all app i can use the state authUser)*/}
       <AuthContextProvider>
-        <App />
+        {/* Socket context provider */}
+        <SocketContextProvider>
+          <App />
+        </SocketContextProvider>
       </AuthContextProvider>
     </BrowserRouter>
   </React.StrictMode>,

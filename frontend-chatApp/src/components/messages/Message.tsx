@@ -15,6 +15,7 @@ export default function MessageC({message}:FormPropsMessage) {
     const chatClassing = fromMe ? "chat chat-start" : "chat chat-end";
     const profilePic = fromMe ? authUser?.profilePic : selectedConversation?.profilePic;
     const bubbleColor = fromMe ? "bg-sky-500" : "bg-gray-800";
+    const shakeClass = message.shouldShake ? "shake" : "";
 
     return (
         <div className={chatClassing}>
@@ -28,7 +29,7 @@ export default function MessageC({message}:FormPropsMessage) {
             <div className="chat-header">
                 <time className="text-xs opacity-50">{formattedTime}</time>
             </div>
-            <div className={`chat-bubble ${bubbleColor} text-white`}>{message.message}</div>
+            <div className={`chat-bubble ${bubbleColor} ${shakeClass} text-white`}>{message.message}</div>
         </div>
     )
 }

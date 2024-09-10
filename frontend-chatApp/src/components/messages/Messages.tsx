@@ -2,9 +2,11 @@ import { useEffect, useRef } from "react";
 import useGetMessages from "../../hooks/UserGetMessages";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
+import UserListenMessages from "../../hooks/UserListenMessages";
 
 export default function Messages() {
     const { loading, messages } = useGetMessages();
+    UserListenMessages();
     //authomatically scroll to the bottom of the messages
     const lastMessageRef= useRef<HTMLDivElement | null>(null);
     useEffect(()=>{

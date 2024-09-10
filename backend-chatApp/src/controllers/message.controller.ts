@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Conversation from '../models/conversation.model.js';
 import Message from '../models/message.model.js';
 import { ErrorMessages } from '../error/errorMessages.error.js';
+import SocketServer from '../socket/socket.socket.js';
 
 export const sendMessage = async (req: Request, res: Response) => {
     try {
@@ -30,11 +31,10 @@ export const sendMessage = async (req: Request, res: Response) => {
         if (newMessagge) {
             conversation.messages.push(newMessagge._id);
         }
-
-        //Socket functionality will go here
-
-        //this will run in parallel
+        //this will run in parallel 
         await Promise.all([conversation.save(), newMessagge.save()]);
+        //Socket functionality will go here
+        SocketServer.getInstance().sendMessageToUser(receiverID, newMessagge);
         res.status(201).json(newMessagge);
 
     } catch (error) {
@@ -56,7 +56,7 @@ export const getMessages = async (req: Request, res: Response) => {
 
         if (!conversation) return res.status(200).json([]);
         const messages = conversation?.messages;
-        return res.status(200).json(messages); 
+        return res.status(200).json(messages);
 
     } catch (error) {
         return res.status(500).json({
