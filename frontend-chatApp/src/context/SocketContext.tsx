@@ -23,7 +23,8 @@ export const SocketContextProvider = ({ children }: SocketContextProviderProps) 
     useEffect(() => {
         if (authUser) {
             //Communicate with the server
-            const socket = io("http://localhost:3001",{
+            // const socket = io("http://localhost:3001",{
+            const socket = io("http://10.79.2.71:3001",{
                 query:{
                     userId:authUser._id, //key:value
                 }
