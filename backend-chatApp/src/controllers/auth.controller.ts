@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-
 import User from '../models/user.model.js';
 import generateTokenAndSetCookie from '../utils/generateToken.utils.js';
 import { ErrorMessages } from '../error/errorMessages.error.js';
