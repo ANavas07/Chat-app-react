@@ -19,7 +19,9 @@ export default function UserSignup() {
             const res:Response = await fetch(`${API_BASE_URL}auth/signup`,{
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                credentials: 'include', //establish and admit access to the cookies
+
+                credentials:"include",//establish and admit access to the cookies
+
                 body: JSON.stringify(user),
             });
 
