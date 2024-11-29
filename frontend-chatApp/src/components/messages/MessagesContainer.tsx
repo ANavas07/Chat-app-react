@@ -27,6 +27,7 @@ export default function MessagesContainer() {
                     className="mr-2 text-gray-100 hover:text-gray-400 flex items-center md:hidden"
                 >
                     <AiOutlineArrowLeft size={20} />
+                    <span className="ml-2">Volver</span>
                 </button>
                 <span className="text-gray-100 font-bold">{selectedConversation.fullName}</span>
             </div>
