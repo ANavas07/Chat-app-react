@@ -2,7 +2,7 @@
 import { GALOISX11, GALOISX13, GALOISX14, GALOISX2, GALOISX3, GALOISX9, INVMATCONSTANT, INVSBOX } from "../utils/calculatedMatrices.utils.js";
 import { addRoundKey } from "./encrypt.services.js";
 
-export function inverseSubBytes(state: number[][]): number[][] {
+function inverseSubBytes(state: number[][]): number[][] {
     const newState: number[][] = [];
     for (let i = 0; i < 4; i++) {
         newState[i] = [];
@@ -17,7 +17,7 @@ export function inverseSubBytes(state: number[][]): number[][] {
 };
 
 
-export function inverseShiftRows(state: number[][]): number[][] {
+function inverseShiftRows(state: number[][]): number[][] {
     const newState: number[][] = [];
     for (let i = 0; i < 4; i++) {
         newState[i] = [];
@@ -29,7 +29,7 @@ export function inverseShiftRows(state: number[][]): number[][] {
 }
 
 
-export function inverseMixColumns(state: number[][]): number[][] {
+function inverseMixColumns(state: number[][]): number[][] {
     const newState: number[][] = [];
     for (let col = 0; col < 4; col++) {
         const originalColumn = state.map(row => row[col]);
@@ -60,7 +60,7 @@ export function inverseMixColumns(state: number[][]): number[][] {
     return newState;
 };
 
-export function aesDecrypt(ciphertext: number[][][], roundKeys: number[][][]): number[][][] {
+export function aesDecrypt(ciphertext: number[][][], roundKeys: number[][][]): string {
     // Aplicar ADDROUNDKEY inicial (última clave de ronda)
     let state = ciphertext.map(block => addRoundKey(block, roundKeys[10]));
 
@@ -81,5 +81,52 @@ export function aesDecrypt(ciphertext: number[][][], roundKeys: number[][][]): n
         return addRoundKey(block, roundKeys[0]); // AddRoundKey inicial
     });
 
-    return state;
+    // state = removePadding
+    return convertToText(state);
+};
+
+export function hexadecimalTextToDecimal4x4(text: string): number[][][] {
+    if (text.length % 32 !== 0) {
+        text = padHex(text);
+    }
+    const hexPairs = text.match(/.{1,2}/g); //Divide el texto en pares de caracteres
+    if (!hexPairs) throw new Error("El texto hexadecimal está vacío o es inválido.");
+
+    //Convertir pares hexadecimales en números decimales
+    const decimalArray = hexPairs.map((hex) => parseInt(hex, 16));
+    // Paso 4: Dividir en bloques de 16 bytes
+    const blocks = [];
+    for (let i = 0; i < decimalArray.length; i += 16) {
+        blocks.push(decimalArray.slice(i, i + 16));
+    }
+
+    // Paso 5: Convertir cada bloque en una matriz 4x4
+    return blocks.map((block) => {
+        const matrix = [];
+        for (let row = 0; row < 4; row++) {
+            matrix.push(block.slice(row * 4, row * 4 + 4));
+        }
+        return matrix;
+    });
+};
+
+const padHex = (hexString: string): string => {
+    const paddingLength = 32 - (hexString.length % 32);
+    return hexString + "0".repeat(paddingLength);
+};
+
+function convertToText(state: number[][][]): string {
+    return state
+        .map(block =>
+            block
+                .map(row =>
+                    row
+                        .map(value =>
+                            value >= 32 && value <= 126 ? String.fromCharCode(value) : '' // Solo caracteres imprimibles
+                        )
+                        .join('')
+                )
+                .join('')
+        )
+        .join('');
 }

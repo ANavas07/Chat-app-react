@@ -5,6 +5,8 @@ import { ErrorMessages } from '../error/errorMessages.error.js';
 import SocketServer from '../socket/socket.socket.js';
 import { aesEncrypt, createState, createStates, formatEncryptedMessage, generateRoundKeys } from '../services/encrypt.services.js';
 import KeyManager from '../services/keyManager.services.js';
+import { MessagePopulated } from '../types/index.js';
+import { aesDecrypt, hexadecimalTextToDecimal4x4 } from '../services/decrypt.services.js';
 
 export const sendMessage = async (req: Request, res: Response) => {
     try {
@@ -65,22 +67,30 @@ export const getMessages = async (req: Request, res: Response) => {
         //form to upload the messages from the conversation (populate)
         const conversation = await Conversation.findOne({
             participants: { $all: [senderID, userToChatID] },
-        }).populate("messages"); //Not reference for actual messages
+        }).populate<{ messages: MessagePopulated[] }>("messages").lean().exec(); //lean() to return a plain js object
 
         if (!conversation) return res.status(200).json([]);
 
         //desencriptar cada mensaje
-        
-        const decryptMessages = conversation.messages.map((messageIterator)=>{
-            // const encryptedMessage= messageIterator.message;
-            console.log(messageIterator);
-            //Dividir el mensaje en bloques de estado    
-            const encryptedBlocks = [];
+        const decryptMessages = conversation.messages.map((messageIterator) => {
+            const encryptedMessage = messageIterator.message;
+            try {
+                const decryptedMessage = aesDecrypt(hexadecimalTextToDecimal4x4(encryptedMessage), KeyManager.getInstance().getKey());
+                return {
+                    ...messageIterator,
+                    message: decryptedMessage
+                }
+
+            } catch (error) {
+                console.error(`Error al desencriptar el mensaje con ID ${messageIterator._id}:`, error);
+                return {
+                    ...messageIterator,
+                    message: "Error al desencriptar",
+                };
+            }
         });
 
-        const messages = conversation?.messages;
-        return res.status(200).json(messages);
-
+        return res.status(200).json(decryptMessages);
     } catch (error) {
         return res.status(500).json({
             error: ErrorMessages.INTERNAL_SERVER_ERROR
