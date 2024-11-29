@@ -6,7 +6,7 @@ import NoChatSelected from "./NoChatSelected";
 
 
 export default function MessagesContainer() {
-    const {selectedConversation , setSelectedConversation, messages, setMessages} = useConversations();
+    const {selectedConversation , setSelectedConversation, setMessages} = useConversations();
     //reset when i logout or when i start in the home page
     useEffect(()=>{
         //clean up function
@@ -16,7 +16,8 @@ export default function MessagesContainer() {
         }
     }, [setSelectedConversation])
     return (
-        <div className="md:min-w-[450px] flex flex-col sm:w-full">
+        // <div className="md:min-w-[450px] flex flex-col sm:w-full">
+        <div className="md:min-w-[450px] flex flex-col sm:w-full h-full overflow-hidden">
             {!selectedConversation ? (
             <NoChatSelected />
             ) : (

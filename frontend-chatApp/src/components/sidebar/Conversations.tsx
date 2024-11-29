@@ -5,7 +5,7 @@ import Conversation from "./Conversation";
 export default function Conversations() {
     const {loading, conversations}= UseGetConversations();
     return (
-        <div className="py-2 flex flex-col overflow-auto">
+        <div className="py-2 flex flex-col overflow-auto h-[87%]">
             {conversations.map((conversation:UserConversation, index:number)=>{
                 return (
                     <Conversation 
@@ -16,7 +16,6 @@ export default function Conversations() {
                 );
             })}
             {loading ? <span className="loading loading-spinner"></span>: null}
-            {/* <Conversation/> */}
         </div>
     )
 }

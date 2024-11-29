@@ -13,8 +13,6 @@ export default function LogoutButton() {
             ) : (
                 <span className="loading loading-spinner"></span>
             )}
-
-
         </div>
     )
 }

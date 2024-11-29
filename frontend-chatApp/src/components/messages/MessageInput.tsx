@@ -4,9 +4,12 @@ import { useState } from "react";
 import userSendMessage from "../../hooks/UserSendMessage";
 
 const initialState: Message={
+    _id: "",
     senderID: "",
     receiverID: "",
     message: "",
+    createdAt:"",
+    shouldShake: false
 }
 
 export default function MessageInput() {

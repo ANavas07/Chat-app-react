@@ -43,15 +43,21 @@ export const sendMessage = async (req: Request, res: Response) => {
             message: encryptedMessage,
         });
 
+        //emit original message in real time
+        const temporalMessage = new Message({
+            senderID,
+            receiverID,
+            message
+        });
+        
         if (newMessagge) {
             conversation.messages.push(newMessagge._id);
         }
         //this will run in parallel 
         await Promise.all([conversation.save(), newMessagge.save()]);
         //Socket functionality will go here
-        SocketServer.getInstance().sendMessageToUser(receiverID, newMessagge);
+        SocketServer.getInstance().sendMessageToUser(receiverID, temporalMessage); //send original message to user
         res.status(201).json(newMessagge);
-
     } catch (error) {
         res.status(500).json({
             error: ErrorMessages.INTERNAL_SERVER_ERROR
@@ -89,7 +95,6 @@ export const getMessages = async (req: Request, res: Response) => {
                 };
             }
         });
-        console.log(decryptMessages);
         return res.status(200).json(decryptMessages);
     } catch (error) {
         return res.status(500).json({

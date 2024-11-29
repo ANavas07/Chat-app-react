@@ -8,21 +8,22 @@ export default function Messages() {
     const { loading, messages } = useGetMessages();
     UserListenMessages();
     //authomatically scroll to the bottom of the messages
-    const lastMessageRef= useRef<HTMLDivElement | null>(null);
-    useEffect(()=>{
-        setTimeout(()=>{
-            lastMessageRef.current?.scrollIntoView({behavior:'smooth'});
-        },100)
-    },[messages]);
+    const lastMessageRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        setTimeout(() => {
+            lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+    }, [messages]);
 
     return (
         //overflow-auto: The overflow-auto utility sets the overflow property to auto. It adds a scrollbar to the element if the content is overflowing the box.
-        <div className="px-4 flex-1 overflow-auto">
+        // <div className="px-4 flex-1 overflow-auto">
+        <div className="px-4 flex-1 h-full overflow-y-auto">
             {!loading && messages.length > 0 &&
                 messages.map((message) => (
-                <div key={message._id} ref={lastMessageRef}>
-                    <Message message={message}/>
-                </div>
+                    <div key={message._id} ref={lastMessageRef}>
+                        <Message message={message} />
+                    </div>
                 ))}
 
             {/* if it is loading, show 3 skeleton messages */}

@@ -22,7 +22,8 @@ const userSendMessage=()=>{
             if(data.error){
                 throw new Error(data.error);
             }
-            setMessages([...messages, data]);
+            const actualMessage = { ...data, message: message.message };//render actual message no the message response in hexadecimal
+            setMessages([...messages, actualMessage]);
         }catch(error){
             toast.error(verifyError(error));
         }finally{
