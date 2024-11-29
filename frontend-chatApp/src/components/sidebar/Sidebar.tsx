@@ -4,7 +4,8 @@ import SearchInput from "./SearchInput";
 
 export default function Sidebar() {
     return (
-        <div className="border-r border-slate-500 p-4 flex flex-col">
+        // className="sm:w-full sm:h-full"
+        <div className="border-r border-slate-500 p-4 flex flex-col sm:w-full sm:h-full ">
             <SearchInput/>
             <div className="divider px-3"></div>
             <Conversations/>

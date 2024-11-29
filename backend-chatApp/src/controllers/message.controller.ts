@@ -89,7 +89,7 @@ export const getMessages = async (req: Request, res: Response) => {
                 };
             }
         });
-
+        console.log(decryptMessages);
         return res.status(200).json(decryptMessages);
     } catch (error) {
         return res.status(500).json({
