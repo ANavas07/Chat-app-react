@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAuthContext } from "./AuthContext";
 import { User } from "../types";
+import { IP_SERVER } from "../helpers/Constants";
 
 type SocketContextProviderProps = {
     children: React.ReactNode;
@@ -23,7 +24,7 @@ export const SocketContextProvider = ({ children }: SocketContextProviderProps) 
     useEffect(() => {
         if (authUser) {
             //Communicate with the server
-            const socket = io("http://localhost:3001",{
+            const socket = io(`http://${IP_SERVER}:3001`,{
                 query:{
                     userId:authUser._id, //key:value
                 }

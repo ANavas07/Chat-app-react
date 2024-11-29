@@ -3,32 +3,42 @@ import useConversations from "../../zustand/ZConversations";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
 import NoChatSelected from "./NoChatSelected";
-
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 export default function MessagesContainer() {
-    const {selectedConversation , setSelectedConversation, messages, setMessages} = useConversations();
-    //reset when i logout or when i start in the home page
-    useEffect(()=>{
-        //clean up function
-        return ()=>{
-            setSelectedConversation(null);
+    const { selectedConversation, setSelectedConversation, setMessages } = useConversations();
+
+    useEffect(() => {
+        return () => {
             setMessages([]);
-        }
-    }, [setSelectedConversation])
+        };
+    }, [setMessages]);
+
     return (
-        <div className="md:min-w-[450px] flex flex-col">
-            {!selectedConversation ? (
-                <NoChatSelected />
-            ) : (
-                <>
-                    <div className="bg-slate-500 px-4 py-2 mb-2">
-                        <span className="label-text">To:</span>{" "}
-                        <span className="text-gray-900 font-bold">{selectedConversation.fullName}</span>
-                    </div>
-                    <Messages />
-                    <MessageInput />
-                </>
-            )}
-        </div>
-    )
+        <div className="flex-1 flex flex-col">
+    {!selectedConversation ? (
+        <NoChatSelected />
+    ) : (
+        <>
+            {/* Cabecera de la conversación */}
+            <div className="bg-gray-800 px-4 py-2 mb-2 flex items-center">
+                <button
+                    onClick={() => setSelectedConversation(null)}
+                    className="mr-2 text-gray-100 hover:text-gray-400 flex items-center md:hidden"
+                >
+                    <AiOutlineArrowLeft size={20} />
+                </button>
+                <span className="text-gray-100 font-bold">{selectedConversation.fullName}</span>
+            </div>
+
+            {/* Mensajes */}
+            <Messages />
+
+            {/* Input de mensaje */}
+            <MessageInput />
+        </>
+    )}
+</div>
+
+    );
 }
