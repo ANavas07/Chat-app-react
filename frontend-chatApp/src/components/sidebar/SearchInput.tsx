@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { FaSearch } from "react-icons/fa";
+import toast from "react-hot-toast";
 import useConversations from "../../zustand/ZConversations";
 import UseGetConversations from "../../hooks/UserConversations";
-import toast from "react-hot-toast";
 
-export default function SearchInput() {
-    const [search, setSearch] = useState('');
+interface SearchInputProps {
+    search: string;
+    setSearch: Dispatch<SetStateAction<string>>;
+}
+
+export default function SearchInput({ search, setSearch }: SearchInputProps) {
     const { setSelectedConversation } = useConversations();
     const { conversations } = UseGetConversations();
 
@@ -50,22 +54,7 @@ export default function SearchInput() {
                 <FaSearch className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 outline-none" />
             </button>
 
-            {/* Mostrar resultados filtrados en tiempo real */}
-            {search && filteredConversations.length > 0 && (
-                <div className="mt-2 bg-white shadow-md rounded-lg p-4 max-h-60 overflow-y-auto">
-                    <ul>
-                        {filteredConversations.map((conversation) => (
-                            <li
-                                key={conversation._id}
-                                className="cursor-pointer hover:bg-gray-100 p-2 rounded-md"
-                                onClick={() => setSelectedConversation(conversation)}
-                            >
-                                {conversation.fullName}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+         
         </form>
-    )
+    );
 }
