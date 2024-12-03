@@ -24,9 +24,9 @@ function inverseShiftRows(state: number[][]): number[][] {
         for (let j = 0; j < 4; j++) {
             newState[i][(j + i) % 4] = state[i][j];
         }
-    }
+    };
     return newState;
-}
+};
 
 
 function inverseMixColumns(state: number[][]): number[][] {
@@ -49,13 +49,13 @@ function inverseMixColumns(state: number[][]): number[][] {
                 if (multiplier === 14) return acc ^ GALOISX14[highNibble][lowNibble]; // Multiplicador 14
                 return acc;
             }, 0);
-        }
+        };
 
         for (let row = 0; row < 4; row++) {
             if (!newState[row]) newState[row] = [];
             newState[row][col] = newColumn[row];
-        }
-    }
+        };
+    };
 
     return newState;
 };
@@ -86,9 +86,10 @@ export function aesDecrypt(ciphertext: number[][][], roundKeys: number[][][]): s
 };
 
 export function hexadecimalTextToDecimal4x4(text: string): number[][][] {
+    //Cada byte representa 2 caracteres hexadecimales
     if (text.length % 32 !== 0) {
         text = padHex(text);
-    }
+    };
     const hexPairs = text.match(/.{1,2}/g); //Divide el texto en pares de caracteres
     if (!hexPairs) throw new Error("El texto hexadecimal está vacío o es inválido.");
 

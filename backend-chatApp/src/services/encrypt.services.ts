@@ -42,7 +42,7 @@ export function createStates(input: string): number[][][] {
         for (let i = 0; i < 4; i++) {
             state[i] = [];
             for (let j = 0; j < 4; j++) {
-                const byte = block.charCodeAt(i * 4 + j);
+                const byte = block.charCodeAt(i * 4 + j); //recorrer linealmente la matriz y obtener el valor en decimal
                 state[i][j] = byte
             };
         }
@@ -98,7 +98,7 @@ export function shiftRows(subBytesMat: number[][]): number[][] {
         }
     }
     return newState;
-}
+};
 
 export function mixColumns(shiftRowsMat: number[][]): number[][] {
     const newState: number[][] = [];
@@ -153,7 +153,7 @@ export function generateRoundKeys(initialKey: number[][]): number[][][] {
             //XOR entre el byte correspondiente de subWord y el byte de la columna de clave anterior
             newKey[i][0] = subWord[i] ^ prevKey[i][0];
         };
-        // Otras palabras
+        // generar palabras de clave restantes
         for (let col = 1; col < 4; col++) {
             for (let row = 0; row < 4; row++) {
                 newKey[row][col] = newKey[row][col - 1] ^ prevKey[row][col];
@@ -182,7 +182,7 @@ export function aesEncrypt(message: number[][][], roundKeys: number[][][]): numb
             block = mixColumns(block);
             return addRoundKey(block, roundKeys[round]);
         })
-    }
+    };
 
     // Última ronda (sin MixColumns)
     state = state.map((block) => {
@@ -192,11 +192,7 @@ export function aesEncrypt(message: number[][][], roundKeys: number[][][]): numb
     });
 
     return state;
-}
-
-export function hexToDecimalMatrix(hexMatrix: string[][]): number[][] {
-    return hexMatrix.map(row => row.map(byte => parseInt(byte, 16)));
-}
+};
 
 export function formatEncryptedMessage(message: number[][][]): string {
     return message
@@ -205,4 +201,4 @@ export function formatEncryptedMessage(message: number[][][]): string {
                 row.map(byte => byte.toString(16).padStart(2, '0')).join('')
             ).join('')
         ).join('');
-}
+};
